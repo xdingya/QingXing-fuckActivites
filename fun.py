@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def getActiveData(activeID):
     activeID = str(activeID)
     response = requests.get("http://www.hnqingxing.com/huodong/show-" + activeID + ".aspx")
@@ -44,3 +45,12 @@ def getActiveData(activeID):
 
     else:
         return False
+
+
+def activityPack(activityID):
+    print("{:*^50}".format(" 以下为活动信息 "))
+    activeDate = getActiveData(activityID)
+    output = "- 活动名称：" + activeDate["name"] + "\n- 活动时间：" + activeDate["attendTime"] + "\n- 报名人数：" + \
+             activeDate["attendPerson"] + "/" + activeDate["totalPerson"] + "\n- 活动简介：" + activeDate["detail"]
+    print(output)
+    print("{:*^59}".format(""))

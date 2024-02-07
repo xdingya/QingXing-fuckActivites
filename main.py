@@ -32,10 +32,7 @@ headers = {
     "Connection": "keep-alive",
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     "Cookie": "ASP.NET_SessionId=" + cookies["ASP.NET_SessionId"] + "; dt_cookie_user_name_remember=" + cookies["dt_cookie_user_name_remember"] + "; dt_cookie_user_pwd_remember=" + cookies["dt_cookie_user_pwd_remember"],
-    "Origin": "http://www.hnqingxing.com",
-    "Referer": "http://www.hnqingxing.com/jianzhi/show-8240.aspx",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
-    "X-Requested-With": "XMLHttpRequest"
 }
 
 data = {"baoming_type": "1", "channel_id": "2", "article_id": activityID}
@@ -47,7 +44,7 @@ while True:
         count += 1
 
         if result.get("status") == 1 and result.get("msg") == "恭喜您，报名成功！":
-            print("[成功] 报名成功！抢占次数：" + str(count) + "\n")
+            print("[成功] 报名成功！共抢占" + str(count) + "次")
             print("{:*^50}".format(" 以下为活动信息 "))
             activeDate = getActiveData(activityID)
             output = "- 活动名称：" + activeDate["name"] + "\n- 活动时间：" + activeDate["attendTime"] + "\n- 报名人数：" + activeDate["attendPerson"] + "/" + activeDate["totalPerson"] + "\n- 活动简介：" + activeDate["detail"]
@@ -56,6 +53,9 @@ while True:
             break
         elif result.get("status") == 0 and result.get("msg") == "对不起，该内容已经不存在了！":
             print("[失败] 该活动暂未发布或已被删除" + " (第" + str(count) + "次尝试)")
+        elif result.get("status") == 0 and result.get("msg") == "对不起，你已经报名！":
+            print("[提示] 此活动你已经报名成功啦~" + " (第" + str(count) + "次尝试)")
+            exit(activityPack(activityID))
         elif result.get("status") == 0:
             print("[失败] " + result.get("msg") + " (第" + str(count) + "次尝试)")
         else:
